@@ -48,7 +48,10 @@ echo ==================================================
 echo Setup complete! Starting application...
 echo ==================================================
 
-REM Run the application
-python src/gui_app.py
+REM Run the application in background and close terminal
+echo Starting GUI application...
+start "" python src/gui_app.py
 
-pause
+REM Wait a moment for the app to start, then close this window
+timeout /t 2 /nobreak >nul
+exit
