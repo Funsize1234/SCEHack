@@ -1,9 +1,14 @@
 @echo off
 REM SCE Question App Runner Script for Windows
 
-echo ==================================================
-echo SCE Question App Setup ^& Runner
-echo ==================================================
+REM Hide the console window by creating a VBS script to run this batch file minimized
+if "%1" neq "hidden" (
+    echo Set objShell = CreateObject("WScript.Shell") > temp_run_hidden.vbs
+    echo objShell.Run "cmd /c ""%~f0"" hidden", 0, False >> temp_run_hidden.vbs
+    cscript //nologo temp_run_hidden.vbs
+    del temp_run_hidden.vbs
+    exit
+)
 
 REM Change to script directory
 cd /d "%~dp0"
@@ -11,47 +16,28 @@ cd /d "%~dp0"
 REM Check if Python is available
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Error: Python is required but not installed
-    pause
+    msg * "Error: Python is required but not installed"
     exit /b 1
 )
-
-echo ✓ Python detected
 
 REM Create virtual environment if it doesn't exist
 if not exist "venv" (
-    echo Creating virtual environment...
-    python -m venv venv
+    python -m venv venv >nul 2>&1
     if %errorlevel% neq 0 (
-        echo Error: Failed to create virtual environment
-        pause
+        msg * "Error: Failed to create virtual environment"
         exit /b 1
     )
-    echo ✓ Virtual environment created
-) else (
-    echo ✓ Virtual environment found
 )
 
-REM Activate virtual environment and install dependencies
-echo Installing dependencies...
+REM Activate virtual environment and install dependencies silently
 call venv\Scripts\activate.bat
-pip install -r requirements.txt
+pip install -r requirements.txt >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Error: Failed to install dependencies
-    pause
+    msg * "Error: Failed to install dependencies"
     exit /b 1
 )
-echo ✓ Dependencies installed successfully
 
-echo.
-echo ==================================================
-echo Setup complete! Starting application...
-echo ==================================================
+REM Run the GUI application
+python src/gui_app.py
 
-REM Run the application in background and close terminal
-echo Starting GUI application...
-start "" python src/gui_app.py
-
-REM Wait a moment for the app to start, then close this window
-timeout /t 2 /nobreak >nul
-exit
+REM Script ends here - no terminal window was ever visible
