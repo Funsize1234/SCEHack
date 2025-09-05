@@ -35,7 +35,13 @@ if not exist "venv" (
 REM Activate virtual environment and install dependencies
 echo Installing dependencies...
 call venv\Scripts\activate.bat
-pip install -r requirements.txt
+if %errorlevel% neq 0 (
+    echo Error: Failed to activate virtual environment
+    pause
+    exit /b 1
+)
+
+venv\Scripts\pip.exe install -r requirements.txt
 if %errorlevel% neq 0 (
     echo Error: Failed to install dependencies
     pause
@@ -48,7 +54,7 @@ echo ==================================================
 echo Setup complete! Starting application...
 echo ==================================================
 
-REM Run the application
-python src/gui_app.py
+REM Run the application using the virtual environment's Python
+venv\Scripts\python.exe src\gui_app.py
 
 pause
