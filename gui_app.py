@@ -87,7 +87,12 @@ class SCEQuestionApp:
         """Handle No button click"""
         # Change the question text to "Wrong Answer."
         self.question_label.config(text="Wrong Answer.", fg='#f44336')
-        # Run main.py
+        # Wait 1 second then quit and run main.py
+        self.root.after(1000, self.quit_and_run_main)
+        
+    def quit_and_run_main(self):
+        """Quit the GUI and run main.py"""
+        self.root.quit()
         try:
             subprocess.Popen([sys.executable, "main.py"])
         except Exception as e:
