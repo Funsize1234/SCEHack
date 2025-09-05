@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import subprocess
 import sys
+import os
 
 class SCEQuestionApp:
     def __init__(self, root):
@@ -94,7 +95,10 @@ class SCEQuestionApp:
         """Quit the GUI and run main.py"""
         self.root.quit()
         try:
-            subprocess.Popen([sys.executable, "main.py"])
+            # Get the directory where this script is located
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            main_py_path = os.path.join(script_dir, "main.py")
+            subprocess.Popen([sys.executable, main_py_path])
         except Exception as e:
             print(f"Error running main.py: {e}")
 
