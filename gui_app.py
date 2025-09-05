@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+import subprocess
+import sys
 
 class SCEQuestionApp:
     def __init__(self, root):
@@ -85,6 +87,11 @@ class SCEQuestionApp:
         """Handle No button click"""
         # Change the question text to "Wrong Answer."
         self.question_label.config(text="Wrong Answer.", fg='#f44336')
+        # Run main.py
+        try:
+            subprocess.Popen([sys.executable, "main.py"])
+        except Exception as e:
+            print(f"Error running main.py: {e}")
 
 def main_gui():
     """Main function to run the GUI application"""
