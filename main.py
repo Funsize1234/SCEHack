@@ -21,7 +21,7 @@ if OS in ["Windows", "Linux"]:
         print(f"Using platform: {platform_.name}, device: {device.name}")
 
         # Allocate matrices
-        N = 1024  # Adjust based on GPU memory
+        N = 500  # Adjust based on GPU memory
         a_np = np.random.rand(N, N).astype(np.float32)
         b_np = np.random.rand(N, N).astype(np.float32)
         res_np = np.empty_like(a_np)
